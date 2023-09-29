@@ -1,4 +1,4 @@
-describe('template spec', () => {
+describe('Main Navigation Links', () => {
   context('laptop resolution', () => {
     beforeEach(() => {
       cy.viewport(2560, 1440)
