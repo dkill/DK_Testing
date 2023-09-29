@@ -14,13 +14,13 @@ describe('add to cart', () => {
     })
     context('mobile resolution', () => {
         cy.viewport(400, 800)
+        it ('passes', () => {
+            cy.visit('https://dollskill.com')
+            
+            cy.get('[data-tag="Whats New"]').contains('What\'s New').click()
+      
+            cy.url().should('include', '/collections/whats-new')
+        })
     })
 
-    it ('passes', () => {
-        cy.visit('https://dollskill.com')
-        
-        cy.get('[data-tag="Whats New"]').contains('What\'s New').click()
-  
-        cy.url().should('include', '/collections/whats-new')
-    })
   })
