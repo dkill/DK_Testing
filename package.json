@@ -1,12 +1,12 @@
 {
-  "name": "-y",
+  "name": "dk_testing",
   "version": "1.0.0",
-  "description": "",
+  "description": "an automated testing suite for the Dolls kill shopify storefront",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "cy:run": "cypress run"
   },
-  "author": "",
+  "author": "Celina Oh",
   "license": "ISC",
   "devDependencies": {
     "cypress": "^13.2.0"
