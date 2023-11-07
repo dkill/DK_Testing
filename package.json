@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "cy:run": "cypress run",
-    "cy:run:nav-live": "cypress run --spec cypress/e2e/navigation/live.cy.js",
-    "cy:run:login-live": "cypress run --spec cypress/e2e/navigation/mobile-login-live.cy.js"
+    "cy:run:nav": "cypress run --spec cypress/e2e/navigation"
   },
   "author": "Celina Oh",
   "license": "ISC",

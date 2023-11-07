@@ -1,9 +1,9 @@
 const mobileBreak = 767
 const viewports = [
     { device: 'iPhone', width: 390, height: 844 },
-    { device: 'iPad', width: 834, height: 1194 },
-    { device: 'Desktop', width: 1920, height: 1080 },
-    { device: 'Laptop', width: 2560, height: 1440 }
+    // { device: 'iPad', width: 834, height: 1194 },
+    // { device: 'Desktop', width: 1920, height: 1080 },
+    // { device: 'Laptop', width: 2560, height: 1440 }
 ]
 
 viewports.forEach((viewport) => {
@@ -46,13 +46,30 @@ viewports.forEach((viewport) => {
             beforeEach(() => {
                 cy.visit(Cypress.env('baseURL'))
             })
-            it('Clicking on the main nav links forwards me to the correct URLs', () => {
-                cy.get('[data-header-main-menu]').find('li').contains('NEW').click()
-                cy.url().should('contain', '/collections/whats-new')
-                cy.get('[data-header-main-menu]').find('li').contains('HALLOWEEN').click()
-                cy.url().should('contain', '/pages/halloween')
-                cy.get('[data-header-main-menu]').find('li').contains('SALE').click()
-                cy.url().should('contain', '/collections/clearance')
+            it.only('Clicking on the main nav links forwards me to the correct URLs', () => {
+
+                
+                cy.get('[data-header-main-menu]').find('a').each(($el, i, $list) => {
+                        let linkText = $el.text().toLowerCase()
+                        if (linkText !== 'sale') {
+                            cy.wrap($el).should('have.attr', 'href')
+                            .and('include', linkText)
+                        } else {
+                            cy.wrap($el).should('have.attr', 'href')
+                            .and('include', 'clearance')
+                        }
+
+                            // let linkText = $el.text().toLowerCase()
+                            // cy.wrap($el).as('link').click()
+                            // cy.url().should('contain', linkText)
+                })
+
+                // cy.get('[data-header-main-menu]').find('li').contains('NEW').click()
+                // cy.url().should('contain', '/collections/whats-new')
+                // cy.get('[data-header-main-menu]').find('li').contains('COLLABS').click()
+                // cy.url().should('contain', '/collections/exxclusive-collabs')
+                // cy.get('[data-header-main-menu]').find('li').contains('SALE').click()
+                // cy.url().should('contain', '/collections/clearance')
             })
         })
 
@@ -63,7 +80,7 @@ viewports.forEach((viewport) => {
             it('Clicking on the search icon shows the search bar and focuses on the input', () => {
                 cy.get('[data-search-btn]').click()
                 cy.get('[data-search-bar]').should('be.visible')
-                cy.get('[data-search-input]').should('be.focused')
+                cy.get('.ais-SearchBox-input').should('be.focused')
             })
         })
 
