@@ -1,25 +1,29 @@
-describe('Search', () => {
+describe('search', () => {
     context('laptop resolution', () => {
       beforeEach(() => {
         cy.viewport(2560, 1440)
       })
-  
-      it('passes', () => {
-        cy.visit('https://dollskill.com')
+    
+      it('black shoes', () => {
+        cy.visit(Cypress.env('baseURL'))
         
-        cy.get('[data-tag="Whats New"]').contains('What\'s New').click()
-  
-        cy.url().should('include', '/collections/whats-new')
+        cy.get('[data-search-btn]').click()
+        cy.get('[data-search-input').type('black shoes{enter}')
+
+        cy.url().should('include', 'pages/search-results?q=black%20shoes')
       })
     })
     context('mobile resolution', () => {
+      beforeEach(() => {
         cy.viewport(400, 800)
-        it ('passes', () => {
-            cy.visit('https://dollskill.com')
-            
-            cy.get('[data-tag="Whats New"]').contains('What\'s New').click()
-      
-            cy.url().should('include', '/collections/whats-new')
-        })
+      })
+      it('black shoes', () => {
+        cy.visit(Cypress.env('baseURL'))
+        
+        cy.get('[data-search-btn]').click()
+        cy.get('[data-search-input').type('black shoes{enter}')
+
+        cy.url().should('include', 'pages/search-results?q=black%20shoes')
+      })
     })
   })

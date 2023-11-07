@@ -29,3 +29,16 @@ Cypress.on('uncaught:exception', (err, runnable) => {
     // failing the test
     return false
   })
+
+Cypress.Commands.add('getByData', (selector) => {
+    return cy.get(`[data-test="${selector}"]`)
+})
+Cypress.Commands.add('getByDataId', (selector) => {
+  return cy.get(`[data-id="${selector}"]`)
+})
+Cypress.Commands.add('getByDataMenu', (selector) => {
+  return cy.get(`[data-menu-content="${selector}"]`)
+})
+Cypress.Commands.add('getByDataMenuHandle', (selector) => {
+  return cy.get(`[data-menu-handle="${selector}"]`)
+})
