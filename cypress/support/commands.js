@@ -25,20 +25,35 @@
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
 
 Cypress.on('uncaught:exception', (err, runnable) => {
-    // returning false here prevents Cypress from
-    // failing the test
-    return false
-  })
+	// returning false here prevents Cypress from
+	// failing the test
+	return false
+})
 
 Cypress.Commands.add('getByData', (selector) => {
-    return cy.get(`[data-test="${selector}"]`)
+	return cy.get(`[data-test="${selector}"]`)
 })
 Cypress.Commands.add('getByDataId', (selector) => {
-  return cy.get(`[data-id="${selector}"]`)
+	return cy.get(`[data-id="${selector}"]`)
 })
 Cypress.Commands.add('getByDataMenu', (selector) => {
-  return cy.get(`[data-menu-content="${selector}"]`)
+	return cy.get(`[data-menu-content="${selector}"]`)
 })
 Cypress.Commands.add('getByDataMenuHandle', (selector) => {
-  return cy.get(`[data-menu-handle="${selector}"]`)
+	return cy.get(`[data-menu-handle="${selector}"]`)
+})
+Cypress.Commands.add('allNew', (viewport) => {
+	if (viewport.width > Cypress.env('mobileBreak')) {
+		return cy.get('[data-header-main-menu]').find('a').contains('NEW').click()
+	} else {
+		return cy.get('[data-header-main-menu]').find('li').not('.tw-hidden').contains('NEW').click()
+	}
+})
+Cypress.Commands.add('closeAttn', () => {
+	cy.wait(5000)
+	return cy.get('body').then(($ele) => {
+		if ($ele.find('#attentive_overlay').length > 0) {
+			cy.get('#attentive_overlay').invoke('attr', 'style', 'display:none')
+		}
+	})
 })

@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "cy:run": "cypress run",
-    "cy:run:nav": "cypress run --spec cypress/e2e/navigation"
+    "cy:run:nav": "cypress run --spec cypress/e2e/navigation",
+    "cy:run:cart": "cypress run --spec cypress/e2e/addToCart",
+    "cy:run:quick": "cypress run --spec cypress/e2e/addToCart/quickAdd.cy.js"
   },
   "author": "Celina Oh",
   "license": "ISC",
