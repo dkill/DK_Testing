@@ -4,11 +4,15 @@
   "description": "an automated testing suite for the Dolls kill shopify storefront",
   "main": "index.js",
   "scripts": {
-    "cy:run": "cypress run"
+    "cy:run": "cypress run",
+    "cy:run:nav": "cypress run --spec cypress/e2e/navigation",
+    "cy:run:cart": "cypress run --spec cypress/e2e/addToCart",
+    "cy:run:quick": "cypress run --spec cypress/e2e/addToCart/quickAdd.cy.js"
   },
   "author": "Celina Oh",
   "license": "ISC",
   "devDependencies": {
-    "cypress": "^13.2.0"
+    "cypress": "^13.2.0",
+    "dotenv": "^16.3.1"
   }
 }
