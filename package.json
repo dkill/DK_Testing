@@ -12,7 +12,14 @@
   "author": "Celina Oh",
   "license": "ISC",
   "devDependencies": {
-    "cypress": "^13.2.0",
+    "cypress": "^13.3.0",
+    "cypress-if": "^1.10.5",
+    "cypress-iframe": "^1.0.1",
     "dotenv": "^16.3.1"
+  },
+  "dependencies": {
+    "cypress-commands": "^3.0.0",
+    "cypress-plugin-steps": "^1.1.1",
+    "cypress-real-events": "^1.11.0"
   }
 }

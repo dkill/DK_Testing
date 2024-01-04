@@ -1,0 +1,48 @@
+Cypress.env('viewports').forEach((viewport) => {
+    describe(`Search before query is entered: ${viewport.device} (${viewport.width} x ${viewport.height})`, () => {
+        beforeEach(() => {
+            cy.viewport(viewport.width, viewport.height)
+            cy.intercept({ resourceType: /xhr|fetch/ }, { log: false })
+            cy.visit(Cypress.env('baseURL'))
+            // cy.closeAttn()
+            cy.get('[data-search-btn').as('searchBtn')
+            cy.get('input.ais-SearchBox-input').as('searchInput')
+            cy.get('input#algolia-grid-changer').as('slider')
+        })
+        it('A slider is displayed on the left and adjusts the number of columns for the product grid', () => {
+            if (viewport.width > Cypress.env('mobileBreak')) {
+                cy.step('click search button')
+                cy.get('@searchBtn').click()
+                cy.step('type search term')
+                cy.get('@searchInput').type('purple').wait(1000)
+                cy.get('@slider').should('be.visible')
+                cy.section('move slider to right end')
+                cy.get('@slider').click()
+                cy.get('@slider').realType('{rightarrow}')
+                cy.get('@slider').realType('{rightarrow}')
+                cy.get('.tw-grid').should('have.class', 'md:tw-grid-cols-2')
+                cy.section('move slider to middle')
+                cy.get('@slider').click()
+                cy.get('@slider').realType('{leftarrow}')
+                cy.get('.tw-grid').should('have.class', 'md:tw-grid-cols-4')
+                cy.section('move slider to left end')
+                cy.get('@slider').click()
+                cy.get('@slider').realType('{leftarrow}')
+                cy.get('.tw-grid').should('have.class', 'md:tw-grid-cols-8')
+            } else {
+                cy.section('Test mobile on phone & browserstack!')
+            }
+        })
+        it('When the slider is all the way to the left, everything but the product image should be hidden', () => {
+            cy.step('click search button')
+            cy.get('@searchBtn').click()
+            cy.step('type search term')
+            cy.get('@searchInput').type('purple').wait(1000)
+            cy.step('make sure slider is at left end')
+            cy.get('@slider').click()
+            cy.get('@slider').realType('{leftarrow}')
+            cy.get('@slider').realType('{leftarrow}')
+            cy.get('.tw-w-full.tw-h-auto').find('h3').parent().parent().should('not.be.visible')
+        })
+    })
+})

@@ -1,0 +1,51 @@
+Cypress.env('viewports').forEach((viewport) => {
+	describe(`Search before query is entered: ${viewport.device} (${viewport.width} x ${viewport.height})`, () => {
+		beforeEach(() => {
+			cy.viewport(viewport.width, viewport.height)
+            cy.intercept({ resourceType: /xhr|fetch/ }, { log: false })
+			cy.visit(Cypress.env('baseURL'))
+			// cy.closeAttn()
+            cy.step('click search button')
+			cy.get('[data-search-btn').click()
+            cy.step('type search term')
+			cy.get('input.ais-SearchBox-input').type('purple').wait(1000)
+            cy.get('#search-filter-drawer').find('button').as('refineBtn')
+		})
+        it('A "refine" button is displayed on the right and when clicked it should open up the filters drawer', () => {
+            cy.get('@refineBtn').should('be.visible')
+            cy.step('click refine button')
+            cy.get('@refineBtn').click()
+            cy.get('section#search-filter-drawer--filters').should('be.visible')
+        })
+        it('When one of the sort buttons is clicked a the top, the product grid re-sorts', () => {
+            cy.get('.tw-w-full.tw-h-auto').first().find('img').attribute('alt').then((name) => {
+                cy.step('click refine button')
+                cy.get('@refineBtn').click()
+                cy.step('click low to high sort option')
+                cy.get('.embla__slide').find('button').contains('Price: Low to High').click()
+                cy.step('click out of filter drawer')
+                cy.get('body').click('left', {force: true})
+                cy.get('.tw-w-full.tw-h-auto').first().find('img').attribute('alt').should('not.contain', name)
+            })
+        })
+        it('When a filter is selected, it should populate a "remove" button at the bottom of the drawer and update the filtered grid', () => {
+            cy.step('click refine button')
+            cy.get('@refineBtn').click()
+            cy.step('click vendor filter')
+            cy.get('span').contains('Vendor').click()
+            cy.step('click sugar thrillz')
+            cy.get('#search-filter-drawer--filters').find('button').contains('Sugar Thrillz').click()
+            cy.get('#search-filter-drawer--footer').find('button').contains('Sugar Thrillz').should('be.visible')
+            cy.step('click out of filter drawer')
+            cy.get('body').click('left', {force: true})
+            cy.step('move slider to show product info')
+            cy.get('input#algolia-grid-changer').as('slider').click()
+            cy.get('@slider').realType('{rightarrow}')
+            cy.step('check vendor line of all products')
+            cy.get('.tw-w-full.tw-h-auto').find('h3').siblings('p').should('contain', 'Sugar Thrillz')
+        })
+        // it('When I click to remove a filter, the product grid re-renders', () => {
+        //     // check products in search, add filter, check products w filter added, remove filter, check products in results again ?
+        // })
+	})
+})
