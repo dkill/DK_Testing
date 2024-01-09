@@ -9,12 +9,12 @@ Cypress.env('viewports').forEach((viewport) => {
 			cy.viewport(viewport.width, viewport.height)
 			cy.intercept({ resourceType: /xhr|fetch/ }, { log: false })
             cy.visit(Cypress.env('baseURL'))
-            // cy.closeAttn()
+            cy.closeAttn()
             cy.getByData('header--search-button').as('searchBtn')
             cy.getByData('search--search-product-card').as('products')
             cy.getByData('search--search-input').as('searchInput')
 		})
-        it('Search results should be paginated wtih 120 results per page', () => {
+        it('Search results should be paginated with 120 results per page', () => {
                 cy.step('click search button')
                 cy.get('@searchBtn').click()
                 cy.step('type search term')
