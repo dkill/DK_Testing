@@ -31,7 +31,7 @@ Cypress.on('uncaught:exception', (err, runnable) => {
 })
 
 Cypress.Commands.add('getByData', (selector) => {
-	return cy.get(`[data-test="${selector}"]`)
+	return cy.get(`[data-test-id="${selector}"]`)
 })
 Cypress.Commands.add('getByDataId', (selector) => {
 	return cy.get(`[data-id="${selector}"]`)
@@ -48,6 +48,10 @@ Cypress.Commands.add('allNew', (viewport) => {
 	} else {
 		return cy.get('[data-header-main-menu]').find('li').not('.tw-hidden').contains('NEW').click()
 	}
+})
+Cypress.Commands.add('moveSlider', (direction) => {
+	cy.getByData('search--grid-slider').as('slider').click()
+	return cy.get('@slider').realType(`{${direction}arrow}`)
 })
 Cypress.Commands.add('closeAttn', () => {
 	cy.wait(5000)

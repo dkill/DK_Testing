@@ -2,11 +2,12 @@ Cypress.env('viewports').forEach((viewport) => {
 	describe(`Search header: ${viewport.device} (${viewport.width} x ${viewport.height})`, () => {
 		beforeEach(() => {
 			cy.viewport(viewport.width, viewport.height)
+			cy.intercept({ resourceType: /xhr|fetch/ }, { log: false })
             cy.visit(Cypress.env('baseURL'))
             // cy.closeAttn()
-            cy.get('[data-search-btn').as('searchBtn')
-            cy.get('[data-search-results-container]').as('searchContainer')
-            cy.get('input.ais-SearchBox-input').as('searchInput')
+            cy.getByData('header--search-button').as('searchBtn')
+            cy.getByData('search--search-container').as('searchContainer')
+            cy.getByData('search--search-input').as('searchInput')
 		})
         it('When I click the search icon in the header, the search dropdown opens', () => {
             cy.get('@searchBtn').click()
