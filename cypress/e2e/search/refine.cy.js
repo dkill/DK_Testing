@@ -1,18 +1,18 @@
 const searchTerm = "black"
 
 Cypress.env('viewports').forEach((viewport) => {
-	describe(`Search refine: ${viewport.device} (${viewport.width} x ${viewport.height})`, () => {
-		beforeEach(() => {
-			cy.viewport(viewport.width, viewport.height)
+    describe(`Search refine: ${viewport.device} (${viewport.width} x ${viewport.height})`, () => {
+        beforeEach(() => {
+            cy.viewport(viewport.width, viewport.height)
             cy.intercept({ resourceType: /xhr|fetch/ }, { log: false })
-			cy.visit(Cypress.env('baseURL'))
-			cy.closeAttn()
+            cy.visit(Cypress.env('baseURL'))
+            cy.closeAttn()
             cy.step('click search button')
-			cy.getByData('header--search-button').click()
+            cy.getByData('header--search-button').click()
             cy.step('type search term')
-			cy.getByData('search--search-input').type(searchTerm).wait(1000)
+            cy.getByData('search--search-input').type(searchTerm).wait(1000)
             cy.getByData('search--refine-button').as('refineBtn')
-		})
+        })
         it('A "refine" button is displayed on the right and when clicked it should open up the filters drawer', () => {
             cy.get('@refineBtn').should('be.visible')
             cy.step('click refine button')
@@ -26,7 +26,7 @@ Cypress.env('viewports').forEach((viewport) => {
                 cy.step('click low to high sort option')
                 cy.getByData('search--sort-by-option').contains('Price: Low to High').click()
                 cy.step('click out of filter drawer')
-                cy.get('body').click('left', {force: true})
+                cy.get('body').click('left', { force: true })
                 cy.getByData('search--search-product-card').first().find('img').attribute('alt').should('not.contain', name)
             })
         })
@@ -36,16 +36,14 @@ Cypress.env('viewports').forEach((viewport) => {
             cy.step('click vendor filter')
             cy.getByData('search--filter-attribute').contains('Vendor').click()
             cy.get('#search-filter-drawer--filters').children('div').not('.tw-hidden').first().children('div').not('.tw-hidden').find('[data-test-id="search--filter-attribute-option"]').first().as('brand').then((brand) => {
-                const brandText = brand.text()
-                const brandSplit = brandText.split(' (')
-                const brandName = brandSplit[0]
+                const brandName = brand.text().split(' (')[0]
                 cy.log(brandName)
                 cy.step('click first option')
                 cy.get('@brand').click()
                 cy.getByData('search--filter-selected').contains(brandName, { matchCase: false }).should('be.visible')
                 cy.getByData('search--filter-drawer-clear-button').should('be.visible')
                 cy.step('click out of filter drawer')
-                cy.get('body').click('left', {force: true})
+                cy.get('body').click('left', { force: true })
                 cy.step('move slider to show product info')
                 cy.moveSlider('right')
                 cy.step('check vendor line of all products')
@@ -55,9 +53,8 @@ Cypress.env('viewports').forEach((viewport) => {
         it('When I click to remove a filter, the product grid re-renders', () => {
             cy.step('move slider to show product info')
             cy.moveSlider('right')
-            cy.getByData('search--search-product-card-name-and-brand').find('h3').first().as('name').then((name) => {
-                const nameText = name.text()
-                cy.log(nameText)
+            cy.getByData('search--search-product-card-name-and-brand').find('h3').first().text().then((name) => {
+                cy.log(name)
                 cy.step('click refine button')
                 cy.get('@refineBtn').click()
                 cy.step('click first filter category')
@@ -65,38 +62,35 @@ Cypress.env('viewports').forEach((viewport) => {
                 cy.step('click first filter option')
                 cy.get('#search-filter-drawer--filters').children('div').not('.tw-hidden').first().children('div').not('.tw-hidden').find('[data-test-id="search--filter-attribute-option"]').first().click()
                 cy.step('click out of filter drawer')
-                cy.get('body').click('left', {force: true})
-                cy.getByData('search--search-product-card-name-and-brand').find('h3').first().should('not.contain', nameText)
+                cy.get('body').click('left', { force: true })
+                cy.getByData('search--search-product-card-name-and-brand').find('h3').first().should('not.contain', name)
                 cy.step('click refine button')
                 cy.get('@refineBtn').click()
                 cy.step('click clear')
-                cy.getByData('search--filter-drawer-clear-button').click({force: true})
+                cy.getByData('search--filter-drawer-clear-button').click({ force: true })
                 cy.step('click out of filter drawer')
-                cy.get('body').click('left', {force: true})
-                cy.getByData('search--search-product-card-name-and-brand').find('h3').first().should('contain', nameText)
+                cy.get('body').click('left', { force: true })
+                cy.getByData('search--search-product-card-name-and-brand').find('h3').first().should('contain', name)
             })
         })
         it('When I click done or outside of the drawer, the drawer should close without any changes to the product grid below', () => {
             cy.step('move slider to show product info')
             cy.moveSlider('right')
-            cy.getByData('search--search-product-card-name-and-brand').find('h3').first().as('name').then((name) => {
-                const nameText = name.text()
-                cy.log(nameText)
+            cy.getByData('search--search-product-card-name-and-brand').find('h3').first().text().then((name) => {
                 cy.step('click refine button')
                 cy.get('@refineBtn').click()
                 cy.step('click first filter category')
                 cy.getByData('search--filter-attribute').first().click()
                 cy.step('click first filter option')
                 cy.get('#search-filter-drawer--filters').children('div').not('.tw-hidden').first().children('div').not('.tw-hidden').find('[data-test-id="search--filter-attribute-option"]').first().click().wait(1000)
-                cy.get('.tw-w-full.tw-h-auto').first().find('h3').as('newName').then((newName) => {
-                    const newNameText = newName.text()
+                cy.get('.tw-w-full.tw-h-auto').first().find('h3').as('newName').text().then((newName) => {
                     cy.log(newName)
-                    cy.get('@newName').should('not.contain', nameText)
+                    cy.get('@newName').should('not.contain', name)
                     cy.step('click out of filter drawer')
-                    cy.get('body').click('left', {force: true})
-                    cy.getByData('search--search-product-card-name-and-brand').find('h3').first().should('contain', newNameText)
+                    cy.get('body').click('left', { force: true })
+                    cy.getByData('search--search-product-card-name-and-brand').find('h3').first().should('contain', newName)
                 })
             })
         })
-	})
+    })
 })

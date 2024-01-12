@@ -14,17 +14,17 @@ Cypress.env('viewports').forEach((viewport) => {
 			cy.step('click search button')
 			cy.getByData('header--search-button').click()
 		})
-		function goToLastPage() {
-			cy.get('@products').then((count) => {
-				const perPageCount = count.length
-				if (perPageCount === 120) {
-					cy.get('@lastPage').wait(500).click().then(goToLastPage)
-				} else {
-					cy.log('end')
-				}
-			})
-		}
-		it.only('The correct number of search results is displayed on the top left', () => {
+		it('The correct number of search results is displayed on the top left', () => {
+			function goToLastPage() {
+				cy.get('@products').then((count) => {
+					const perPageCount = count.length
+					if (perPageCount === 120) {
+						cy.get('@lastPage').wait(500).click().then(goToLastPage)
+					} else {
+						cy.log('end')
+					}
+				})
+			}
 			cy.step('type search query')
 			cy.get('@searchInput').type(searchTerm).wait(2000)
 			cy.step('get product count')
@@ -41,8 +41,7 @@ Cypress.env('viewports').forEach((viewport) => {
 							const lastCount = lastProducts.length
 							cy.get('@lastPage').then((lastPage) => {
 								pageCount = Number(lastPage.text()) - 1
-								let productCount = pageCount * perPage
-								productCount += lastCount
+								let productCount = pageCount * perPage + lastCount
 								cy.getByData('search--search-results-count')
 									.should('contain', productCount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","))
 							})
@@ -57,11 +56,10 @@ Cypress.env('viewports').forEach((viewport) => {
 			cy.step('move slider')
 			cy.moveSlider('right')
 			cy.step('get first product name')
-			cy.getByData('search--search-product-card-name-and-brand').first().find('h3').then((name) => {
-				const nameText = name.text()
+			cy.getByData('search--search-product-card-name-and-brand').first().find('h3').text().then((name) => {
 				cy.step('click on product')
 				cy.get('@products').first().click()
-				cy.get('h1').should('contain', nameText)
+				cy.get('h1').should('contain', name)
 			})
 		})
 		it('If I click a product then go back in the browser, the search dropdown should open with the last searched term active and the relevant results displayed', () => {
