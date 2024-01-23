@@ -32,7 +32,8 @@ Cypress.env('viewports').forEach((viewport) => {
             cy.step('click second product')
             cy.getByData('product-card').eq(1).click()
             cy.get('img.pdpimage').first().attribute('src').then((src) => {
-                const img = src.split('/files/')[1]
+                const img = src.split('/products/')[1]
+                cy.log(src)
                 cy.step('select size')
                 cy.getByData('pdp--size-box').not('.oos').first().click()
                 cy.step('add to bag')
