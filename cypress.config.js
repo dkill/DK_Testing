@@ -9,7 +9,7 @@ module.exports = defineConfig({
     },
   },
   env: {
-    baseURL: 'https://dolls-test.myshopify.com/?preview_theme_id=138999857409',
+    baseURL: 'https://dollskill.com',
     mobileBreak: 767,
     navBreak: 1025,
     viewports: [

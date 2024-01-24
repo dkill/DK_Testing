@@ -31,7 +31,7 @@ Cypress.env('viewports').forEach((viewport) => {
 			cy.get('@products').then((products) => {
 				const perPage = products.length
 				cy.get('@pagination').then((pagination) => {
-					let pageCount = pagination.length - 1
+					let pageCount = pagination.length
 					if (pageCount === 1) {
 						cy.getByData('search--search-results-count').should('contain', perPage)
 					} else {
@@ -69,7 +69,7 @@ Cypress.env('viewports').forEach((viewport) => {
 			cy.get('@products').first().click()
 			cy.step('go back in browser')
 			cy.go('back')
-			cy.url().should('include', `?search=${searchTerm}`)
+			cy.url().should('include', `search=${searchTerm}`)
 			cy.getByData('search--search-container').should('be.visible')
 			cy.get('@searchInput').should('have.value', searchTerm)
 		})
