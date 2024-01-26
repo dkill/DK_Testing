@@ -13,7 +13,7 @@ Cypress.env('viewports').forEach((viewport) => {
             cy.getByData('pdp--size-box').not('.oos').first().click()
             cy.getByData('pdp--add-to-bag-button').click().wait(500)
         })
-        it.only('Pressing the increment and decrement buttons (+ and -) updates the quantity and cart subtotal correctly', () => {
+        it('Pressing the increment and decrement buttons (+ and -) updates the quantity and cart subtotal correctly', () => {
             cy.get('span.product-price').as('linePrice')
             cy.get('span.cart-subtotal-amount').as('subtotal')
             cy.get('div.cart-quantity-adjuster').find('span').not('.toggle-quantity').as('qty')
