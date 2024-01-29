@@ -19,8 +19,7 @@ Cypress.env('viewports').forEach((viewport) => {
                     cy.wrap(size).click()
                     cy.step('add to bag')
                     cy.getByData('pdp--add-to-bag-button').click()
-                    cy.getByData('cart--drawer')
-                        .should('have.class', 'drawer1-open')
+                    cy.waitUntil(() => cy.getByData('cart--drawer').attribute('class').then(attr => attr.includes('drawer1-open')))
                     cy.getByData('cart--cart-item-product-title').first().contains(productText, { matchCase: false })
                         .should('exist')
                     cy.getByData('cart--cart-item-variant')
@@ -38,6 +37,7 @@ Cypress.env('viewports').forEach((viewport) => {
                 cy.getByData('pdp--size-box').not('.oos').first().click()
                 cy.step('add to bag')
                 cy.getByData('pdp--add-to-bag-button').click()
+                cy.waitUntil(() => cy.getByData('cart--drawer').attribute('class').then(attr => attr.includes('drawer1-open')))
                 cy.getByData('cart--cart-item').find('img').as('cartImg').attribute('src')
                     .should('contain', img)
                 cy.get('@cartImg')
@@ -53,6 +53,7 @@ Cypress.env('viewports').forEach((viewport) => {
                 cy.getByData('pdp--size-box').not('.oos').first().click()
                 cy.step('add to bag')
                 cy.getByData('pdp--add-to-bag-button').click()
+                cy.waitUntil(() => cy.getByData('cart--drawer').attribute('class').then(attr => attr.includes('drawer1-open')))
                 cy.getByData('cart--cart-item-product-title')
                     .should('contain', title)
             })
@@ -65,6 +66,9 @@ Cypress.env('viewports').forEach((viewport) => {
                 cy.getByData('pdp--size-box').not('.oos').first().click()
                 cy.step('add to bag')
                 cy.getByData('pdp--add-to-bag-button').click()
+                cy.waitUntil(() => cy.getByData('cart--drawer').attribute('class').then(attr => attr.includes('drawer1-open')), {
+                    timeout: 8000
+                })
                 cy.getByData('pdp--product-name').text().then((product) => {
                     for (let j = 1; j < 5; j++) {
                         cy.get('.product-page-hero-content').find('.product-price').text().then((priceLine) => {
@@ -74,7 +78,8 @@ Cypress.env('viewports').forEach((viewport) => {
                                 cy.wrap(cartPrice)
                                     .should('eq', price * j)
                                 cy.step('add qty')
-                                cy.get('@container').find('.toggle-quantity[data-type="add"]').click().wait(500)
+                                cy.get('@container').find('.toggle-quantity[data-type="add"]').as('add').click()
+                                cy.waitUntil(() => cy.get('@add').attribute('data-current-qty').then(num => Number(num) === j + 1))
                             })
                         })
                     }

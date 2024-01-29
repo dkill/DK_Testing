@@ -11,7 +11,8 @@ Cypress.env('viewports').forEach((viewport) => {
             cy.getByData('product-card').eq(1).click()
             cy.step('select size')
             cy.getByData('pdp--size-box').not('.oos').first().click()
-            cy.getByData('pdp--add-to-bag-button').click().wait(500)
+            cy.getByData('pdp--add-to-bag-button').click()
+            cy.waitUntil(() => cy.getByData('cart--drawer').attribute('class').then(attr => attr.includes('drawer1-open')))
         })
         it('Pressing the increment and decrement buttons (+ and -) updates the quantity and cart subtotal correctly', () => {
             cy.get('span.product-price').as('linePrice')
@@ -39,14 +40,20 @@ Cypress.env('viewports').forEach((viewport) => {
                 }
                 cy.step('add qty')
                 for (let i = 2; i < 5; i++) {
-                    cy.get('@add').click().wait(500)
+                    let cookie
+                    cy.getCookie('cart_ts').then((c) => {cookie = c})
+                    cy.get('@add').click()
+                    cy.waitUntil(() => cy.get('@add').attribute('data-current-qty').then(num => Number(num) === i))
                     checkQty(i)
                     checkTotal('@linePrice', i)
                     checkTotal('@subtotal', i)
                 }
                 cy.step('remove qty')
                 for (let i = 3; i > 0; i--) {
-                    cy.get('@remove').click().wait(500)
+                    let cookie
+                    cy.getCookie('cart_ts').then((c) => {cookie = c})
+                    cy.get('@remove').click()
+                    cy.waitUntil(() => cy.get('@remove').attribute('data-current-qty').then(num => Number(num) === i))
                     checkQty(i)
                     checkTotal('@linePrice', i)
                     checkTotal('@subtotal', i)
@@ -55,8 +62,11 @@ Cypress.env('viewports').forEach((viewport) => {
         })
         it('Clicking remove on a line item removes that line item in its entirety', () => {
             cy.getByData('cart--cart-item').first().then((product) => {
+                let cookie
+                cy.getCookie('cart_ts').then((c) => {cookie = c})
                 cy.step('click remove button')
                 cy.getByData('cart--remove-button').click()
+                cy.waitUntil(() => cy.getCookie('cart_ts').then(newCookie => newCookie != cookie))
                 cy.wrap(product)
                     .should('not.exist')
             })
@@ -65,14 +75,20 @@ Cypress.env('viewports').forEach((viewport) => {
             cy.step('add first upsell to cart')
             cy.get('#complete-look-items').find('.card-content').first().as('card').find('.product-title a').text().then((name) => {
                 cy.section('I can add an upsell from the rendered slider to my cart')
+                let cookie
+                cy.getCookie('cart_ts').then((c) => {cookie = c})
                 cy.get('@card').find('button.upsell-add').click()
+                // cy.waitUntil(() => cy.getCookie('cart_ts').then(newCookie => newCookie != cookie))
+                cy.waitUntil(() => cy.getByData('cart--cart-item').then(newCookie => newCookie != cookie))
                 cy.getByData('cart--cart-item').contains(name).as('cartCard')
                     .should('exist')
                 cy.section('I can see that upsell removed from the slider')
                 cy.get('#complete-look-items').find('.card-content').contains(name)
                     .should('not.exist')
                 cy.section('I can see that upsell returned to the slider if removed from the user\'s cart')
+                cy.getCookie('cart_ts').then((c) => {cookie = c})
                 cy.get('@cartCard').parents('div.cart-content').find('[data-test-id="cart--remove-button"]').click()
+                cy.waitUntil(() => cy.getCookie('cart_ts').then(newCookie => newCookie != cookie))
                 cy.getByData('cart--cart-item').contains(name)
                     .should('not.exist')
                 cy.get('#complete-look-items').find('.card-content').contains(name)
@@ -93,6 +109,7 @@ Cypress.env('viewports').forEach((viewport) => {
                 cy.getByData('pdp--add-to-bag-button').click()
             }
             cy.step('scroll to last item')
+            cy.waitUntil(() => cy.getByData('cart--drawer').attribute('class').then(attr => attr.includes('drawer1-open')))
             cy.getByData('cart--cart-item').eq(-1).as('lastItem').scrollIntoView()
             cy.get('@lastItem')
                 .should('be.visible')

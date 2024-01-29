@@ -23,6 +23,7 @@ Cypress.env('viewports').forEach((viewport) => {
             }
             cy.step('open mini cart')
             cy.getByData('header--mini-cart-button').click()
+            cy.waitUntil(() => cy.getByData('cart--drawer').attribute('class').then(attr => attr.includes('drawer1-open')))
             cy.getByData('cart--cart-item-variant').attribute('data-vid').each((item) => {
                 items.push(item)
             })
