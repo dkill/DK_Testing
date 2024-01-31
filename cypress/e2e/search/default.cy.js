@@ -1,13 +1,13 @@
 Cypress.env('viewports').forEach((viewport) => {
-	describe(`Search before query is entered: ${viewport.device} (${viewport.width} x ${viewport.height})`, () => {
-		beforeEach(() => {
-			cy.viewport(viewport.width, viewport.height)
-			cy.intercept({ resourceType: /xhr|fetch/ }, { log: false })
+    describe(`Search before query is entered: ${viewport.device} (${viewport.width} x ${viewport.height})`, () => {
+        beforeEach(() => {
+            cy.viewport(viewport.width, viewport.height)
+            cy.intercept({ resourceType: /xhr|fetch/ }, { log: false })
             cy.visit(Cypress.env('baseURL'))
             cy.closeAttn()
             cy.step('click search button')
             cy.getByData('header--search-button').click()
-		})
+        })
         it('When I first open search, there are 16 products displayed', () => {
             cy.getByData('search--default-product-card')
                 .should('have.length', 16)
