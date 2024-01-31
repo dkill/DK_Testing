@@ -41,16 +41,16 @@ import 'cypress-commands'
 // cy.iframe(selector) causes subsequent events to execute inside iframe
 // cy.enter() executes group of commands inside iframe
 //   cy.enter(selector).then(getBody => {})
-// import 'cypress-iframe'
+import 'cypress-iframe'
 
 // https://github.com/bahmutov/cypress-if
 // .if()
 // .else()
-// import 'cypress-if'
+import 'cypress-if'
 
 // https://github.com/cypress-io/cypress/issues/2134#issuecomment-1692593562
 // cy.print({title: '~', message: '~', type: '~'})
-// import './printLog'
+import './printLog'
 
 // https://www.npmjs.com/package/cypress-wait-until
 import 'cypress-wait-until';

@@ -49,6 +49,10 @@ Cypress.Commands.add('allNew', (viewport) => {
 		return cy.getByData('header--mobile-link').contains('NEW').click()
 	}
 })
+Cypress.Commands.add('moveSlider', (direction) => {
+	cy.getByData('search--grid-slider').as('slider').click()
+	return cy.get('@slider').realType(`{${direction}arrow}`)
+})
 Cypress.Commands.add('closeAttn', () => {
 	cy.wait(5000)
 	return cy.get('body').then(($ele) => {

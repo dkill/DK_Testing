@@ -8,13 +8,14 @@
     "cy:run:nav": "cypress run --spec cypress/e2e/navigation",
     "cy:run:cart": "cypress run --spec cypress/e2e/addToCart",
     "cy:run:quick": "cypress run --spec cypress/e2e/addToCart/quickAdd.cy.js",
+    "cy:run:search": "cypress run --spec cypress/e2e/search"
     "cy:run:footer": "cypress run --spec cypress/e2e/footer",
     "cy:run:minicart": "cypress run --spec cypress/e2e/miniCart"
   },
   "author": "Celina Oh",
   "license": "ISC",
   "devDependencies": {
-    "cypress": "^13.2.0",
+    "cypress": "^13.3.0",
     "cypress-if": "^1.10.5",
     "cypress-iframe": "^1.0.1",
     "cypress-wait-until": "^3.0.1",
