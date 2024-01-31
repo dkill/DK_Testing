@@ -44,9 +44,9 @@ Cypress.Commands.add('getByDataMenuHandle', (selector) => {
 })
 Cypress.Commands.add('allNew', (viewport) => {
 	if (viewport.width > Cypress.env('mobileBreak')) {
-		return cy.get('[data-header-main-menu]').find('a').contains('NEW').click()
+		return cy.getByData('header--desktop-link').contains('NEW').click()
 	} else {
-		return cy.get('[data-header-main-menu]').find('li').not('.tw-hidden').contains('NEW').click()
+		return cy.getByData('header--mobile-link').contains('NEW').click()
 	}
 })
 Cypress.Commands.add('moveSlider', (direction) => {

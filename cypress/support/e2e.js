@@ -51,3 +51,6 @@ import 'cypress-if'
 // https://github.com/cypress-io/cypress/issues/2134#issuecomment-1692593562
 // cy.print({title: '~', message: '~', type: '~'})
 import './printLog'
+
+// https://www.npmjs.com/package/cypress-wait-until
+import 'cypress-wait-until';
