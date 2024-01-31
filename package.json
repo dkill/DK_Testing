@@ -8,7 +8,7 @@
     "cy:run:nav": "cypress run --spec cypress/e2e/navigation",
     "cy:run:cart": "cypress run --spec cypress/e2e/addToCart",
     "cy:run:quick": "cypress run --spec cypress/e2e/addToCart/quickAdd.cy.js",
-    "cy:run:search": "cypress run --spec cypress/e2e/search"
+    "cy:run:search": "cypress run --spec cypress/e2e/search",
     "cy:run:footer": "cypress run --spec cypress/e2e/footer",
     "cy:run:minicart": "cypress run --spec cypress/e2e/miniCart"
   },
