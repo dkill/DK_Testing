@@ -18,3 +18,39 @@ import './commands'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+// https://github.com/filiphric/cypress-plugin-steps
+// add steps and sections to tests
+// cy.step('~~')
+// cy.section('~~)
+// 
+import 'cypress-plugin-steps'
+
+// https://github.com/dmtrKovalenko/cypress-real-events
+// need .realClick() to move search slider !!!
+import 'cypress-real-events'
+
+// https://github.com/Lakitna/cypress-commands
+// .attribute() to yield value of attribute
+// .text() to yield text inside element
+// .to() to change subject to another type (number to string etc)
+import 'cypress-commands'
+
+// https://gitlab.com/kgroat/cypress-iframe
+// cy.frameLoaded() checks that iframe has loaded
+// cy.iframe(selector) causes subsequent events to execute inside iframe
+// cy.enter() executes group of commands inside iframe
+//   cy.enter(selector).then(getBody => {})
+// import 'cypress-iframe'
+
+// https://github.com/bahmutov/cypress-if
+// .if()
+// .else()
+// import 'cypress-if'
+
+// https://github.com/cypress-io/cypress/issues/2134#issuecomment-1692593562
+// cy.print({title: '~', message: '~', type: '~'})
+// import './printLog'
+
+// https://www.npmjs.com/package/cypress-wait-until
+import 'cypress-wait-until';
