@@ -40,16 +40,17 @@ Cypress.env('viewports').forEach((viewport) => {
                 })
             })
         })
-        it('Add to wishlist', function () {
+        it.only('Add to wishlist', { scrollBehavior: false }, function () {
             cy.step('go to all new')
             cy.allNew(viewport)
-            cy.step('click add to wishlist button').wait(599)
-            cy.getByData('product-card').eq(4).find('.add-to-wishlist-btn').click()
+            cy.step('click add to wishlist button')
+            cy.getByData('product-card').eq(2).find('.add-to-wishlist-btn').click().wait(500)
             cy.get('#headlessui-listbox-button-P0-1').click()
+            cy.waitUntil(() => cy.get('#headlessui-listbox-button-P0-1').attribute('aria-expanded').then(attr => attr === 'true'))
             cy.get('ul#headlessui-listbox-options-P0-0 li').eq(1).as('list').find('p').first().text().then((listName) => {
                 cy.section('The user can select a different wishlist from the dropdown and see it displayed after the dropdown is closed')
                 cy.step('select second list')
-                cy.get('@list').click()  
+                cy.get('@list').click()
                 cy.get('#headlessui-listbox-button-P0-1').find('p').first().text()
                     .should('eq', listName)
                 cy.step('click add to list')
@@ -60,6 +61,21 @@ Cypress.env('viewports').forEach((viewport) => {
                 cy.getByData('product-card').eq(1).find('.add-to-wishlist-btn').click()
                 cy.get('#headlessui-listbox-button-P0-1').find('p').first().text()
                     .should('eq', listName)
+
+                cy.get('p').contains('Size').siblings('span').within(() => {
+                    cy.get('button[disabled]').find('svg')
+                        .should('not.exist')
+                    cy.get('button').then((sizes) => {
+                        cy.log(sizes)
+                        // let notOOS = []
+                        // sizes.forEach((size) => {
+                        //     cy.wrap(size).find('svg').if('not.exist').then(() => {
+                        //         notOOS.push(size)
+                        //         cy.log(size)
+                        //     })
+                        // })
+                    })
+                })
             })
 
         })
