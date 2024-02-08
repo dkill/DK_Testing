@@ -16,7 +16,7 @@
   "author": "Celina Oh",
   "license": "ISC",
   "devDependencies": {
-    "cypress": "^13.3.0",
+    "cypress": "^13.6.4",
     "cypress-if": "^1.10.5",
     "cypress-iframe": "^1.0.1",
     "cypress-wait-until": "^3.0.1",

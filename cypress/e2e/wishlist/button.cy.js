@@ -8,8 +8,8 @@ Cypress.env('viewports').forEach((viewport) => {
             cy.visit(Cypress.env('baseURL'))
             cy.closeAttn()
         })
-        function login () {
-            cy.section('The login form text should read "SIGN IN TO VIEW UR WISHLIST"')
+        function wishlistLogin () {
+            cy.section(`The login form text should read ${text}`)
             cy.get('p').contains(text, { matchCase: false }).should('be.visible')
             cy.get('input[type="password"]').parents('form').within(($form) => {
                 cy.fixture('user-login').then( function (user) {
@@ -23,12 +23,12 @@ Cypress.env('viewports').forEach((viewport) => {
                 cy.get('button').click()
             })
         }
-        function addFromCard (cardData, title) {
-            cy.getByData(cardData).first().as('card').find(title).as('productTitle').text().then((name) => {
+        function addFromCard (container, cardData, title) {
+            cy.findByData(container, cardData).first().as('card').find(title).as('productTitle').text().then((name) => {
                 cy.section('Clicking the add to wishlist button prompts the user to log in when they are not')
                 cy.step('click add to wishlist button')
                 cy.get('@card').find('.add-to-wishlist-btn').click()
-                login()
+                wishlistLogin()
                 cy.section('After successfully signing in, the page should auto scroll to the previous position and open the add to wishlist drawer with the correct product selected')
                 cy.get('@productTitle')
                     .should('be.visible')
@@ -37,33 +37,36 @@ Cypress.env('viewports').forEach((viewport) => {
             })
         }
         it('Home page', function () {
-            addFromCard('product-card', '.product-title a')
+            addFromCard('[data-test-id="carousel"]', 'product-card', '.product-title a')
         })
         it('Search - default', function () {
             cy.step('click search button')
             cy.getByData('header--search-button').click()
-            addFromCard('search--default-product-card', 'h3')
+            addFromCard('div', 'search--default-product-card', 'h3')
+            // fails because page redirects to my account after sign in
         })
         it('Search - results', function () {
             cy.step('click search button')
             cy.getByData('header--search-button').click()
             cy.getByData('search--search-input').type('purple')
             cy.moveSlider('right')
-            addFromCard('search--search-product-card', 'h3')
+            addFromCard('div', 'search--search-product-card', 'h3')
+            // fails because page redirects to my account after sign in
         })
         it('Collection page', function () {
             cy.step('go to all new')
-            cy.allNew(viewport)
-            addFromCard('product-card', '.product-title a')
+            cy.allNew(viewport).wait(1000)
+            addFromCard('algolia-collection', 'search--search-product-card', 'h3')
+            // fails because page redirects to my account after sign in
         })
         it('PDP', function () {
             cy.allNew(viewport)
-            cy.getByData('product-card').first().click()
+            cy.findByData('algolia-collection', 'search--search-product-card').first().click()
             cy.getByData('pdp--product-name').text().then((name) => {
                 cy.section('Clicking the add to wishlist button prompts the user to log in when they are not')
                 cy.step('click add to wishlist button')
                 cy.get('.product-page-hero-content').find('.add-to-wishlist-btn').click()
-                login()
+                wishlistLogin()
                 cy.section('After successfully signing in, the page should auto scroll to the previous position and open the add to wishlist drawer with the correct product selected')
                 cy.getByData('pdp--product-name')
                     .should('be.visible')

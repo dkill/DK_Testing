@@ -42,11 +42,21 @@ Cypress.Commands.add('getByDataMenu', (selector) => {
 Cypress.Commands.add('getByDataMenuHandle', (selector) => {
 	return cy.get(`[data-menu-handle="${selector}"]`)
 })
+Cypress.Commands.add('findByData', (get, find) => {
+	return cy.get(get).find(`[data-test-id="${find}"]`)
+})
 Cypress.Commands.add('allNew', (viewport) => {
 	if (viewport.width > Cypress.env('mobileBreak')) {
 		return cy.getByData('header--desktop-link').contains('NEW').click()
 	} else {
 		return cy.getByData('header--mobile-link').contains('NEW').click()
+	}
+})
+Cypress.Commands.add('clickHeaderLink', (viewport, linkText) => {
+	if (viewport.width > Cypress.env('mobileBreak')) {
+		return cy.getByData('header--desktop-link').contains(linkText, { matchCase: false }).click()
+	} else {
+		return cy.getByData('header--mobile-link').contains(linkText, { matchCase: false }).click()
 	}
 })
 Cypress.Commands.add('moveSlider', (direction) => {
@@ -60,4 +70,26 @@ Cypress.Commands.add('closeAttn', () => {
 	// 		cy.get('#attentive_overlay').invoke('attr', 'style', 'display:none')
 	// 	}
 	// })
+})
+Cypress.Commands.add('hasPseudoElement', {prevSubject:true}, (subject, pseudo) => {
+	return window.getComputedStyle(subject[0], pseudo).content !== 'none'
+  })
+Cypress.Commands.add('login', (fixture) => {
+		cy.section('sign in')
+		cy.step('click my account in footer')
+		cy.getByData('footer--account-button').scrollIntoView().click()
+		cy.get('input[type="password"]').parents('form').within(($form) => {
+			cy.fixture(fixture).then(function (user) {
+				this.user = user
+				cy.step('type email')
+				cy.get('input[type="email"]').type(this.user.email)
+				cy.step('type password')
+				cy.get('input[type="password"]').type(this.user.password)
+			})
+			cy.step('click sign in')
+			cy.get('button').click()
+		})
+})
+Cypress.Commands.add('collectionCard', () => {
+	return cy.get('algolia-collection').find(`[data-test-id="'search--search-product-card'"]`)
 })
