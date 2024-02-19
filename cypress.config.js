@@ -9,13 +9,13 @@ module.exports = defineConfig({
     },
   },
   env: {
-    baseURL: 'https://dollskill.com',
+    baseURL: 'https://dolls-test.myshopify.com/?preview_theme_id=140027691265',
     mobileBreak: 767,
     navBreak: 1025,
     viewports: [
-      // { device: 'iPhone', width: 390, height: 844 },
-      // { device: 'iPad', width: 834, height: 1194 },
-      // { device: 'Desktop', width: 1920, height: 1080 },
+      { device: 'iPhone', width: 390, height: 844 },
+      { device: 'iPad', width: 834, height: 1194 },
+      { device: 'Desktop', width: 1920, height: 1080 },
       { device: 'Laptop', width: 2560, height: 1440 }
     ]
   }

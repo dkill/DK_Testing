@@ -64,12 +64,8 @@ Cypress.Commands.add('moveSlider', (direction) => {
 	return cy.get('@slider').realType(`{${direction}arrow}`)
 })
 Cypress.Commands.add('closeAttn', () => {
-	// cy.wait(5000)
-	// return cy.get('body').then(($ele) => {
-	// 	if ($ele.find('#attentive_overlay').length > 0) {
-	// 		cy.get('#attentive_overlay').invoke('attr', 'style', 'display:none')
-	// 	}
-	// })
+	cy.waitUntil(() => cy.get('body').then($ele => $ele.find('#attentive_overlay').length > 0))
+	return cy.get('#attentive_overlay').invoke('attr', 'style', 'display:none')
 })
 Cypress.Commands.add('hasPseudoElement', {prevSubject:true}, (subject, pseudo) => {
 	return window.getComputedStyle(subject[0], pseudo).content !== 'none'
