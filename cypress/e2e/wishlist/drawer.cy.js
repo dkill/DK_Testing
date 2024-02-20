@@ -98,7 +98,7 @@ Cypress.env('viewports').forEach((viewport) => {
                 })
             })
         })
-        it.only('The user can click out of the drawer or click the x to close the drawer', function () {
+        it('The user can click out of the drawer or click the x to close the drawer', function () {
             cy.step('go to all new')
             cy.allNew(viewport)
             cy.collectionCard().first().find('.add-to-wishlist-btn').click()
@@ -107,7 +107,7 @@ Cypress.env('viewports').forEach((viewport) => {
             cy.get('#headlessui-dialog-P0-0').find('section')
                 .should('not.be.visible')
         })
-        it('Add to wishlist', function () {
+        it.only('Add to wishlist', function () {
             cy.step('go to all new')
             cy.allNew(viewport)
             cy.collectionCard().first().as('card').find('.add-to-wishlist-btn').as('heart').then((heart) => {

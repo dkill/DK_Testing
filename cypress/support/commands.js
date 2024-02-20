@@ -70,12 +70,12 @@ Cypress.Commands.add('closeAttn', () => {
 Cypress.Commands.add('hasPseudoElement', {prevSubject:true}, (subject, pseudo) => {
 	return window.getComputedStyle(subject[0], pseudo).content !== 'none'
   })
-Cypress.Commands.add('login', (fixture) => {
+Cypress.Commands.add('login', (login) => {
 		cy.section('sign in')
 		cy.step('click my account in footer')
 		cy.getByData('footer--account-button').scrollIntoView().click()
 		cy.get('input[type="password"]').parents('form').within(($form) => {
-			cy.fixture(fixture).then(function (user) {
+			cy.fixture('logins').its(login).then(function (user) {
 				this.user = user
 				cy.step('type email')
 				cy.get('input[type="email"]').type(this.user.email)
@@ -87,5 +87,5 @@ Cypress.Commands.add('login', (fixture) => {
 		})
 })
 Cypress.Commands.add('collectionCard', () => {
-	return cy.get('algolia-collection').find(`[data-test-id="'search--search-product-card'"]`)
+	return cy.get('algolia-collection').find(`[data-test-id="search--search-product-card"]`)
 })
