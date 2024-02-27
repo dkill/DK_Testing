@@ -42,7 +42,7 @@ Cypress.Commands.add('getByDataMenu', (selector) => {
 Cypress.Commands.add('getByDataMenuHandle', (selector) => {
 	return cy.get(`[data-menu-handle="${selector}"]`)
 })
-Cypress.Commands.add('findByData', (get, find) => {
+Cypress.Commands.add('findData', (get, find) => {
 	return cy.get(get).find(`[data-test-id="${find}"]`)
 })
 Cypress.Commands.add('allNew', (viewport) => {
@@ -63,17 +63,21 @@ Cypress.Commands.add('moveSlider', (direction) => {
 	cy.getByData('search--grid-slider').as('slider').click()
 	return cy.get('@slider').realType(`{${direction}arrow}`)
 })
-Cypress.Commands.add('closeAttn', () => {
-	cy.waitUntil(() => cy.get('body').then($ele => $ele.find('#attentive_overlay').length > 0))
-	return cy.get('#attentive_overlay').invoke('attr', 'style', 'display:none')
+Cypress.Commands.add('closeAttn', (viewport) => {
+	// 	cy.waitUntil(() => cy.get('body').then($ele => $ele.find('#attentive_overlay').length > 0))
+	// 	return cy.get('#attentive_overlay').invoke('attr', 'style', 'display:none')
 })
-Cypress.Commands.add('hasPseudoElement', {prevSubject:true}, (subject, pseudo) => {
+Cypress.Commands.add('hasPseudoElement', { prevSubject: true }, (subject, pseudo) => {
 	return window.getComputedStyle(subject[0], pseudo).content !== 'none'
-  })
+})
 Cypress.Commands.add('login', (login) => {
-		cy.section('sign in')
+	cy.section('sign in')
+	cy.session([login], () => {
+		cy.visit(Cypress.env('baseURL'))
+		cy.closeAttn()
 		cy.step('click my account in footer')
-		cy.getByData('footer--account-button').scrollIntoView().click()
+		cy.getByData('footer--footer-section-title').contains('account', { matchCase: false }).scrollIntoView({ offset: { top: -400, left: 0 } }).click()
+		cy.getByData('footer--account-button').click()
 		cy.get('input[type="password"]').parents('form').within(($form) => {
 			cy.fixture('logins').its(login).then(function (user) {
 				this.user = user
@@ -85,7 +89,16 @@ Cypress.Commands.add('login', (login) => {
 			cy.step('click sign in')
 			cy.get('button').click()
 		})
+		cy.url()
+			.should('contain', 'account')
+	})
 })
 Cypress.Commands.add('collectionCard', () => {
 	return cy.get('algolia-collection').find(`[data-test-id="search--search-product-card"]`)
+})
+Cypress.Commands.add('wishlistCard', () => {
+	return cy.getByData('wishlist-portal--detail--product-grid').find('[data-test-id="search--default-product-card"]')
+})
+Cypress.Commands.add('collectionHeart', (num) => {
+	cy.collectionCard().find('[data-test-id="wishlist-button"]').not('.wishlist-filled').eq(num)
 })
