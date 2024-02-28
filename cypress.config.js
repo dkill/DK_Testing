@@ -9,7 +9,7 @@ module.exports = defineConfig({
     },
   },
   env: {
-    baseURL: 'https://dollskill.com',
+    baseURL: 'https://www.dollskill.com',
     mobileBreak: 767,
     navBreak: 1025,
     viewports: [
@@ -17,6 +17,9 @@ module.exports = defineConfig({
       { device: 'iPad', width: 834, height: 1194 },
       { device: 'Desktop', width: 1920, height: 1080 },
       { device: 'Laptop', width: 2560, height: 1440 }
-    ]
+    ],
+    collCard: 'search--undefined-product-card',
+    wishlistURL: 'https://www.dollskill.com/pages/wishlists',
+    allNewURL: 'https://www.dollskill.com/collections/whats-new'
   }
 });

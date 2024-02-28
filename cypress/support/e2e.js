@@ -27,7 +27,7 @@ import './commands'
 import 'cypress-plugin-steps'
 
 // https://github.com/dmtrKovalenko/cypress-real-events
-// need .realClick() to move search slider !!!
+// npm install cypress-real-events
 import 'cypress-real-events'
 
 // https://github.com/Lakitna/cypress-commands
