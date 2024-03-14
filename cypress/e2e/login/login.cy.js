@@ -1,5 +1,5 @@
 Cypress.env('viewports').forEach((viewport) => {
-	describe(`Login links: ${viewport.device} (${viewport.width} x ${viewport.height})`, () => {
+	describe(`Sign in form: ${viewport.device} (${viewport.width} x ${viewport.height})`, () => {
 		beforeEach(() => {
 			cy.viewport(viewport.width, viewport.height)
             cy.intercept({ resourceType: /xhr|fetch/ }, { log: false })
@@ -29,16 +29,20 @@ Cypress.env('viewports').forEach((viewport) => {
         it('If an an invalid email is entered, I see a warning under the form field', function () {
             cy.getByData('sign-in-form').within(() => {
                 cy.step('type invalid email')
-                cy.get('@email').type('celina')
+                cy.get('@email').type('cypress')
                 cy.step('click sign in button')
                 cy.getByData('sign-in-button').click()
                 cy.get('@email').invoke('prop', 'validationMessage')
                     .should('not.to.be.empty')
             })
         })
-        it('If the email is correct and the password is blank, I only see the error under the password', function () {
+        it.only('If the email is correct and the password is blank, I only see the error under the password', function () {
             cy.getByData('sign-in-form').within(() => {
-                cy.get('@email').type('celina@celina.celina.com')
+                cy.fixture('logins').its('default').then(function (user) {
+                    this.user = user
+                    cy.step('type email')
+                    cy.get('@email').type(this.user.email)
+                })
                 cy.getByData('sign-in-button').click()
                 cy.get('@email').next('p')
                     .should('not.exist')
@@ -50,8 +54,13 @@ Cypress.env('viewports').forEach((viewport) => {
         })
         it('If login fails, I see an error asking me to try again', function () {
             cy.getByData('sign-in-form').within(() => {
-                cy.get('@email').type('celina@celina.celina.com')
-                cy.get('@password').type('abcde')
+                cy.fixture('logins').its('default').then(function (user) {
+                    this.user = user
+                    cy.step('type email')
+                    cy.get('@email').type(this.user.email)
+                    cy.step('type invalid password')
+                    cy.get('input[type="password"]').type('abcde')
+                })
                 cy.getByData('sign-in-button').click()
                 cy.get('p').contains('try again', { matchCase: false })
                     .should('exist')

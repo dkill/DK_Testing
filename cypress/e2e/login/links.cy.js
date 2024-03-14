@@ -5,9 +5,12 @@ Cypress.env('viewports').forEach((viewport) => {
             cy.intercept({ resourceType: /xhr|fetch/ }, { log: false })
 		})
         it(`Clicking on the account links in the footer won't let me proceed to the account section unless I'm logged in`, function () {
+            cy.step('visit home page')
             cy.visit(Cypress.env('baseURL'))
             cy.closeAttn()
+            cy.step('click account header')
             cy.getByData('footer--footer-section-title').contains('account', { matchCase: false }).click()
+            cy.step('click my account button')
             cy.getByData('footer--account-button').click()
             cy.getByData('login-drawer')
                 .should('be.visible')
@@ -15,6 +18,7 @@ Cypress.env('viewports').forEach((viewport) => {
                 .should('not.include', 'account')
         })
         it('Going directly to the /account page without being logged in redirects me to a login page', function () {
+            cy.step('visit account page')
             cy.visit(Cypress.env('baseURL') + '/account')
             cy.closeAttn()
             cy.url()
@@ -22,7 +26,8 @@ Cypress.env('viewports').forEach((viewport) => {
             cy.get('#sign-in-form')
                 .should('be.visible')
         })
-        it('Going directly to the /account page without being logged in redirects me to a login page', function () {
+        it('Going directly to the /wishlists page without being logged in redirects me to a login page', function () {
+            cy.step('visit wishlist page')
             cy.visit(Cypress.env('baseURL') + '/pages/wishlists')
             cy.closeAttn()
             cy.url()

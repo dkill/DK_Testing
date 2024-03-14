@@ -1,5 +1,5 @@
 Cypress.env('viewports').forEach((viewport) => {
-    describe(`Login links: ${viewport.device} (${viewport.width} x ${viewport.height})`, () => {
+    describe(`Reset password form: ${viewport.device} (${viewport.width} x ${viewport.height})`, () => {
         beforeEach(() => {
             cy.viewport(viewport.width, viewport.height)
             cy.intercept({ resourceType: /xhr|fetch/ }, { log: false })
@@ -26,16 +26,19 @@ Cypress.env('viewports').forEach((viewport) => {
             cy.step('click forgot password link')
             cy.getByData('forgot-password-link').click()
             cy.getByData('reset-password-form').within(() => {
-                cy.get('input').type('dollskill')
+                cy.step('type malformed email')
+                cy.get('input').type('cypress')
+                cy.step('click reset password button')
                 cy.getByData('reset-password-button').click()
                 cy.get('input').next('p').contains('valid email', { matchCase: false })
                     .should('be.visible')
             })
         })
-        it('When the form is submitted successfully, I see the same messaging whether or not the email exists in our system', function () {
+        it.only('When the form is submitted successfully, I see the same messaging whether or not the email exists in our system', function () {
             cy.step('click forgot password link')
             cy.getByData('forgot-password-link').click()
             cy.getByData('reset-password-form').within(() => {
+                cy.step('type nonexistent email')
                 cy.get('input').type('dollskill1234567890@dollskill.com')
                 cy.getByData('reset-password-button').click()
             })
@@ -43,7 +46,11 @@ Cypress.env('viewports').forEach((viewport) => {
                 cy.getByData('login-link').click()
                 cy.getByData('forgot-password-link').click()
                 cy.getByData('reset-password-form').within(() => {
-                    cy.get('input').type('celina@celina.celina.com')
+                    cy.fixture('logins').its('default').then(function (user) {
+                        this.user = user
+                        cy.step('type existent email')
+                        cy.get('input').type(this.user.email)
+                    })
                     cy.getByData('reset-password-button').click()
                     cy.get('p').first().text()
                         .should('eq', msg)
