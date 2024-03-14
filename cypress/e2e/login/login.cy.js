@@ -36,7 +36,7 @@ Cypress.env('viewports').forEach((viewport) => {
                     .should('not.to.be.empty')
             })
         })
-        it.only('If the email is correct and the password is blank, I only see the error under the password', function () {
+        it('If the email is correct and the password is blank, I only see the error under the password', function () {
             cy.getByData('sign-in-form').within(() => {
                 cy.fixture('logins').its('default').then(function (user) {
                     this.user = user
