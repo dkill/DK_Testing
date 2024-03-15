@@ -34,7 +34,7 @@ Cypress.env('viewports').forEach((viewport) => {
                     .should('be.visible')
             })
         })
-        it.only('When the form is submitted successfully, I see the same messaging whether or not the email exists in our system', function () {
+        it('When the form is submitted successfully, I see the same messaging whether or not the email exists in our system', function () {
             cy.step('click forgot password link')
             cy.getByData('forgot-password-link').click()
             cy.getByData('reset-password-form').within(() => {

@@ -16,7 +16,7 @@ Cypress.env('viewports').forEach((viewport) => {
 		})
         it('If both the email and password fields are blank, I see warnings under both form fields telling me what to enter', function () {
             cy.getByData('sign-in-form').within(() => {
-                cy.step('click sign in button')
+                cy.step('click sign in')
                 cy.getByData('sign-in-button').click()
                 cy.get('@email').next('p')
                     .should('be.visible')
@@ -30,7 +30,7 @@ Cypress.env('viewports').forEach((viewport) => {
             cy.getByData('sign-in-form').within(() => {
                 cy.step('type invalid email')
                 cy.get('@email').type('cypress')
-                cy.step('click sign in button')
+                cy.step('click sign in')
                 cy.getByData('sign-in-button').click()
                 cy.get('@email').invoke('prop', 'validationMessage')
                     .should('not.to.be.empty')
@@ -43,6 +43,7 @@ Cypress.env('viewports').forEach((viewport) => {
                     cy.step('type email')
                     cy.get('@email').type(this.user.email)
                 })
+                cy.step('click sign in')
                 cy.getByData('sign-in-button').click()
                 cy.get('@email').next('p')
                     .should('not.exist')
@@ -61,9 +62,25 @@ Cypress.env('viewports').forEach((viewport) => {
                     cy.step('type invalid password')
                     cy.get('input[type="password"]').type('abcde')
                 })
+                cy.step('click sign in')
                 cy.getByData('sign-in-button').click()
                 cy.get('p').contains('try again', { matchCase: false })
                     .should('exist')
+            })
+        })
+        it.only('I can submit the form successfully if there are no errors', function () {
+            cy.getByData('sign-in-form').within(() => {
+                cy.fixture('logins').its('default').then(function (user) {
+                    this.user = user
+                    cy.step('type email')
+                    cy.get('@email').type(this.user.email)
+                    cy.step('type password')
+                    cy.get('input[type="password"]').type(this.user.password)
+                })
+                cy.step('click sign in')
+                cy.getByData('sign-in-button').click()
+                cy.url()
+                    .should('contain', '/account')
             })
         })
 	})
