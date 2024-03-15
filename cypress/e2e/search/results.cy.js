@@ -14,7 +14,7 @@ Cypress.env('viewports').forEach((viewport) => {
 			cy.step('click search button')
 			cy.getByData('header--search-button').click()
 		})
-		it.only('The correct number of search results is displayed on the top left', () => {
+		it('The correct number of search results is displayed on the top left', () => {
 			function goToLastPage() {
 				cy.get('@products').then((count) => {
 					const perPageCount = count.length
