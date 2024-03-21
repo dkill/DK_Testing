@@ -53,11 +53,9 @@ Cypress.Commands.add('moveSlider', (direction) => {
 	cy.getByData('search--grid-slider').as('slider').click()
 	return cy.get('@slider').realType(`{${direction}arrow}`)
 })
-Cypress.Commands.add('closeAttn', () => {
-	cy.wait(5000)
-	return cy.get('body').then(($ele) => {
-		if ($ele.find('#attentive_overlay').length > 0) {
-			cy.get('#attentive_overlay').invoke('attr', 'style', 'display:none')
-		}
-	})
+Cypress.Commands.add('closeAttn', (viewport) => {
+	// 	cy.waitUntil(() => cy.get('body').then($ele => $ele.find('#attentive_overlay').length > 0))
+	// 	return cy.get('#attentive_overlay').invoke('attr', 'style', 'display:none')
+	cy.waitUntil(() => cy.get('body').then($ele => $ele.find('#ps__widget_container').length > 0))
+	return cy.get('#ps__widget_container').invoke('attr', 'style', 'display:none')
 })
